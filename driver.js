@@ -9,5 +9,6 @@ function getRandomMove() {
 }
 
 const { start, end } = getRandomMove();
+
 knightMoves(start, end);
-knightMoves(start, end, (path) => console.log(path));
+knightMoves(start, end, (path) => console.log(path, "callbackk"));

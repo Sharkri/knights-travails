@@ -1,20 +1,7 @@
 function Board() {
-  const gameboard = Array(8)
-    .fill()
-    .map(() =>
-      Array(8)
-        .fill()
-        .map(() => null)
-    );
-  gameboard.reverse();
-
-  function getGameBoard(coords) {
-    return coords ? gameboard[coords[0]][coords[1]] : gameboard;
-  }
-
-  function getPossibleKnightMoves(start) {
-    const row = start[1];
-    const col = start[0];
+  function getKnightMoves(coords) {
+    const row = coords[1];
+    const col = coords[0];
     if (row > 7 || col > 7 || row < 0 || col < 0) return null;
     const possibleMoves = [
       [col + 2, row - 1],
@@ -31,7 +18,7 @@ function Board() {
       (move) => Math.min(...move) >= 0 && Math.max(...move) < 8
     );
   }
-  return { getGameBoard, getPossibleKnightMoves };
+  return { getKnightMoves };
 }
 function shortestKnightPath(start, end) {
   const board = Board();
@@ -50,7 +37,7 @@ function shortestKnightPath(start, end) {
       break;
     }
     // enqueue possible moves
-    const possibleMoves = board.getPossibleKnightMoves([
+    const possibleMoves = board.getKnightMoves([
       first.coords[0],
       first.coords[1],
     ]);
@@ -60,8 +47,8 @@ function shortestKnightPath(start, end) {
   }
   return path.reverse();
 }
-
-function knightMoves(start, end, fn) {
+const CHESS_LETTERS = "abcdefgh";
+export default function knightMoves(start, end, fn) {
   if (Math.min(...start, ...end) < 0 || Math.max(...start, ...end) > 7) {
     return null;
   }
@@ -69,8 +56,7 @@ function knightMoves(start, end, fn) {
   if (typeof fn === "function") fn(path);
   else {
     console.log(`You made it in ${path.length - 1} moves! Here's your path:`);
-    path.map((move) => console.log(move));
+    path.map((move) => console.log(`N${CHESS_LETTERS[move[1]]}${move[0] + 1}`));
   }
   return path;
 }
-export default knightMoves;
